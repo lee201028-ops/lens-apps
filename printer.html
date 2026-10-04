@@ -16,23 +16,26 @@
   .hdr { width:100%; display:flex; justify-content:space-between; align-items:baseline; }
   .hdr h1 { font-size:26px; letter-spacing:3px; color:#7fd4ff; font-weight:700; }
   .hdr .asof { font-size:16px; color:#888; }
-  .status { margin-top:16px; font-size:42px; font-weight:800; letter-spacing:2px; text-align:center; }
+  .status { margin-top:12px; font-size:36px; font-weight:800; letter-spacing:2px; text-align:center; }
   .status.printing { color:#3dff7a; }
   .status.idle { color:#999; }
   .status.paused { color:#ff9d3d; }
   .status.error { color:#ff6b6b; }
-  .file { margin-top:8px; font-size:23px; color:#ccc; max-width:100%;
+  .file { margin-top:6px; font-size:20px; color:#ccc; max-width:100%;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .barwrap { width:100%; margin-top:14px; }
-  .bar { height:32px; background:#1a1a1a; border-radius:10px; overflow:hidden; }
+  .barwrap { width:100%; margin-top:10px; }
+  .bar { height:26px; background:#1a1a1a; border-radius:10px; overflow:hidden; }
   .barfill { height:100%; background:#0a84ff; border-radius:10px; }
-  .pct { text-align:center; font-size:38px; font-weight:800; margin-top:4px; }
-  .layer { text-align:center; font-size:21px; color:#999; margin-top:2px; }
-  .grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 20px; width:100%; margin-top:14px; }
-  .cell { display:flex; justify-content:space-between; align-items:baseline;
-    border-top:1px solid #222; padding:7px 2px; font-size:25px; }
-  .cell .k { color:#999; font-size:19px; }
-  .cell .v { font-weight:700; }
+  .pct { text-align:center; font-size:32px; font-weight:800; margin-top:2px; }
+  .layer { text-align:center; font-size:19px; color:#999; margin-top:2px; }
+  .camwrap { position:relative; width:100%; margin-top:10px; }
+  .camwrap img { width:100%; height:290px; object-fit:cover; border-radius:12px; display:block;
+    background:#111; }
+  .camtemps { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,.68);
+    padding:7px 6px; font-size:20px; text-align:center; border-radius:0 0 12px 12px;
+    font-weight:700; letter-spacing:1px; }
+  .camtemps span { color:#999; font-weight:400; font-size:16px; margin:0 4px 0 10px; }
+  .camtemps span:first-child { margin-left:0; }
   .offline { margin-top:12px; width:100%; text-align:center; color:#ffb84d; font-size:20px;
     border:2px solid #5a431f; border-radius:10px; padding:10px; }
 </style>
@@ -49,11 +52,9 @@
     <div class="pct" id="pct">–</div>
     <div class="layer" id="layer"></div>
   </div>
-  <div class="grid">
-    <div class="cell"><span class="k">Nozzle</span><span class="v" id="nozzle">–</span></div>
-    <div class="cell"><span class="k">Bed</span><span class="v" id="bed">–</span></div>
-    <div class="cell"><span class="k">Chamber</span><span class="v" id="chamber">–</span></div>
-    <div class="cell"><span class="k">Fan</span><span class="v" id="fan">–</span></div>
+  <div class="camwrap">
+    <img id="cam" alt="Printer camera" src="printer-cam.jpg">
+    <div class="camtemps"><span>NOZ</span><b id="nozzle">–</b><span>BED</span><b id="bed">–</b><span>CHM</span><b id="chamber">–</b><span>FAN</span><b id="fan">–</b></div>
   </div>
   <div id="offbox" style="width:100%"></div>
 <script>
@@ -94,7 +95,12 @@
       $("asof").textContent="";
       $("offbox").innerHTML='<div class="offline">OFFLINE — no printer data yet</div>';
     });
+    var cam=$("cam");
+    cam.src="printer-cam.jpg?nocache="+Date.now();
   }
+  var camEl=$("cam");
+  camEl.onerror=function(){ this.style.display="none"; };
+  camEl.onload=function(){ this.style.display="block"; };
   refresh();
   setInterval(refresh, 60*1000);
 })();
