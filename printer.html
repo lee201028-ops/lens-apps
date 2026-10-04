@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=600, height=600, initial-scale=1.0, user-scalable=no">
+<title>FlashForge — Printer Status</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { background:#000; color:#fff; height:100%; overflow:hidden; }
+  body {
+    font-family:-apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    padding:20px 24px 16px; width:600px; height:600px; overflow:hidden; margin:0 auto;
+    -webkit-font-smoothing:antialiased;
+  }
+  .hdr { width:100%; display:flex; justify-content:space-between; align-items:baseline; }
+  .hdr h1 { font-size:26px; letter-spacing:3px; color:#7fd4ff; font-weight:700; }
+  .hdr .asof { font-size:16px; color:#888; }
+  .status { margin-top:16px; font-size:42px; font-weight:800; letter-spacing:2px; text-align:center; }
+  .status.printing { color:#3dff7a; }
+  .status.idle { color:#999; }
+  .status.paused { color:#ff9d3d; }
+  .status.error { color:#ff6b6b; }
+  .file { margin-top:8px; font-size:23px; color:#ccc; max-width:100%;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .barwrap { width:100%; margin-top:14px; }
+  .bar { height:32px; background:#1a1a1a; border-radius:10px; overflow:hidden; }
+  .barfill { height:100%; background:#0a84ff; border-radius:10px; }
+  .pct { text-align:center; font-size:38px; font-weight:800; margin-top:4px; }
+  .layer { text-align:center; font-size:21px; color:#999; margin-top:2px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 20px; width:100%; margin-top:14px; }
+  .cell { display:flex; justify-content:space-between; align-items:baseline;
+    border-top:1px solid #222; padding:7px 2px; font-size:25px; }
+  .cell .k { color:#999; font-size:19px; }
+  .cell .v { font-weight:700; }
+  .offline { margin-top:12px; width:100%; text-align:center; color:#ffb84d; font-size:20px;
+    border:2px solid #5a431f; border-radius:10px; padding:10px; }
+</style>
+</head>
+<body>
+  <div class="hdr">
+    <h1>FLASHFORGE</h1>
+    <div class="asof" id="asof">connecting…</div>
+  </div>
+  <div class="status idle" id="status">—</div>
+  <div class="file" id="file"></div>
+  <div class="barwrap">
+    <div class="bar"><div class="barfill" id="barfill" style="width:0%"></div></div>
+    <div class="pct" id="pct">–</div>
+    <div class="layer" id="layer"></div>
+  </div>
+  <div class="grid">
+    <div class="cell"><span class="k">Nozzle</span><span class="v" id="nozzle">–</span></div>
+    <div class="cell"><span class="k">Bed</span><span class="v" id="bed">–</span></div>
+    <div class="cell"><span class="k">Chamber</span><span class="v" id="chamber">–</span></div>
+    <div class="cell"><span class="k">Fan</span><span class="v" id="fan">–</span></div>
+  </div>
+  <div id="offbox" style="width:100%"></div>
+<script>
+(function(){
+  "use strict";
+  function $(id){ return document.getElementById(id); }
+  function chicagoTime(iso){
+    try{
+      return new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",
+        hour:"numeric",minute:"2-digit"}).format(new Date(iso));
+    }catch(e){ return ""; }
+  }
+  function render(d){
+    var st=String(d.state||"unknown").toLowerCase();
+    var el=$("status"), label=st.toUpperCase(), cls="idle";
+    if(st==="printing"){ cls="printing"; label="● PRINTING"; }
+    else if(st==="paused"){ cls="paused"; label="❚❚ PAUSED"; }
+    else if(st.indexOf("error")>=0||st==="failed"){ cls="error"; label="⚠ "+label; }
+    el.textContent=label; el.className="status "+cls;
+    $("file").textContent=d.file||"";
+    var p=d.progress_pct;
+    if(p==null){ $("pct").textContent="–"; $("barfill").style.width="0%"; }
+    else{ $("pct").textContent=Math.round(p)+"%"; $("barfill").style.width=Math.min(100,Math.max(0,p))+"%"; }
+    $("layer").textContent=(d.layer!=null&&d.total_layers)?("Layer "+d.layer+" / "+d.total_layers):"";
+    $("nozzle").textContent=d.nozzle_c!=null?Math.round(d.nozzle_c)+"°C":"–";
+    $("bed").textContent=d.bed_c!=null?Math.round(d.bed_c)+"°C":"–";
+    $("chamber").textContent=d.chamber_c!=null?Math.round(d.chamber_c)+"°C":"–";
+    $("fan").textContent=d.fan_pct!=null?d.fan_pct+"%":"–";
+    var upd=d.updated_at?Date.parse(d.updated_at):0;
+    var stale=!upd||(Date.now()-upd)>10*60*1000;
+    $("asof").textContent=d.updated_at?("as of "+chicagoTime(d.updated_at)):"";
+    $("offbox").innerHTML=stale?'<div class="offline">OFFLINE — showing last known status</div>':"";
+  }
+  function refresh(){
+    fetch("printer.json?nocache="+Date.now()).then(function(r){
+      if(!r.ok) throw 0; return r.json();
+    }).then(render).catch(function(){
+      $("asof").textContent="";
+      $("offbox").innerHTML='<div class="offline">OFFLINE — no printer data yet</div>';
+    });
+  }
+  refresh();
+  setInterval(refresh, 60*1000);
+})();
+</script>
+</body>
+</html>
