@@ -122,13 +122,24 @@
     $("errBox").innerHTML='<div class="err">'+msg+'</div>';
   }
 
-  // D-pad fallback: arrows move focus to the flag button (no-op if already focused)
+  var flagBtn=$("flagBtn");
+  // The flag link is the page's only action: make it impossible to miss via D-pad.
+  // A real click handler covers taps the system synthesizes without default anchor behavior.
+  flagBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    window.location.href=this.href;
+  });
   document.addEventListener("keydown", function(e){
     if(e.key==="ArrowDown"||e.key==="ArrowUp"||e.key==="ArrowLeft"||e.key==="ArrowRight"){
-      var b=$("flagBtn");
-      if(document.activeElement!==b){ b.focus(); e.preventDefault(); }
+      if(document.activeElement!==flagBtn){ flagBtn.focus(); e.preventDefault(); }
+    }else if(e.key==="Enter"){
+      // Enter anywhere activates the flag link (it's the only action on the page)
+      e.preventDefault();
+      window.location.href=flagBtn.href;
     }
   });
+  // Focus the button on load so the D-pad target is visible immediately
+  flagBtn.focus();
 
   function loadTide(){
     var t=new Date(), e=new Date(t.getTime()+2*864e5);
