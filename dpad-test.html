@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=600, height=600, initial-scale=1.0, user-scalable=no">
+<title>D-pad test</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { background:#000; color:#fff; }
+  body {
+    font-family:-apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    width:600px; height:600px; overflow:hidden; text-align:center; padding:20px;
+  }
+  .t { font-size:36px; font-weight:800; letter-spacing:2px; color:#7fd4ff; }
+  .lbl { font-size:24px; color:#999; margin-top:18px; }
+  #key { font-size:60px; font-weight:800; color:#fff; min-height:76px; }
+  #count { font-size:26px; color:#888; }
+  #btn {
+    font-size:32px; font-weight:800; padding:20px 44px; margin-top:22px;
+    background:#0a84ff; color:#fff; border:none; border-radius:14px;
+  }
+  #btn:focus, #btn:focus-visible { outline:5px solid #ffd60a; outline-offset:3px; }
+  #clicked { font-size:30px; color:#3dff7a; font-weight:700; min-height:44px; margin-top:12px; }
+  .hint { font-size:20px; color:#666; margin-top:14px; max-width:520px; }
+</style>
+</head>
+<body>
+  <div class="t">D-PAD TEST</div>
+  <div class="lbl">Last key pressed:</div>
+  <div id="key">—</div>
+  <div id="count">keys seen: 0</div>
+  <button id="btn" type="button">TEST BUTTON</button>
+  <div id="clicked"></div>
+  <div class="hint">Press D-pad arrows and Enter. Tell Jarvis what the screen shows.</div>
+<script>
+(function(){
+  "use strict";
+  var n=0, keyEl=document.getElementById("key"), countEl=document.getElementById("count");
+  document.addEventListener("keydown", function(e){
+    n++;
+    keyEl.textContent=e.key;
+    countEl.textContent="keys seen: "+n;
+  });
+  document.getElementById("btn").addEventListener("click", function(){
+    document.getElementById("clicked").textContent="BUTTON CLICKED!";
+  });
+})();
+</script>
+</body>
+</html>
