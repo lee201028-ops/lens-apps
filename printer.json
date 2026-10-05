@@ -1,11 +1,11 @@
 {
- "updated_at": "2026-10-05T00:50:59Z",
+ "updated_at": "2026-10-05T00:52:53Z",
  "state": "printing",
  "file": "cute_ghost_15pcs.3mf",
- "progress_pct": 76.9,
- "layer": 84,
+ "progress_pct": 77.2,
+ "layer": 85,
  "total_layers": 200,
- "nozzle_c": 222.0,
+ "nozzle_c": 219.0,
  "bed_c": 55.0,
  "chamber_c": 33.0,
  "fan_pct": 70
