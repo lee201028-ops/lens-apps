@@ -1,9 +1,9 @@
 {
- "updated_at": "2026-10-05T05:36:09Z",
+ "updated_at": "2026-10-05T05:42:07Z",
  "state": "printing",
  "file": "ghostbooams_plate_1.3mf",
- "progress_pct": 88.9,
- "layer": 296,
+ "progress_pct": 91.1,
+ "layer": 310,
  "total_layers": 391,
  "nozzle_c": 220.0,
  "bed_c": 54.0,
