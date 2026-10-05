@@ -1,12 +1,12 @@
 {
- "updated_at": "2026-10-05T02:58:33Z",
- "state": null,
+ "updated_at": "2026-10-05T02:59:36Z",
+ "state": "idle",
  "file": null,
- "progress_pct": null,
- "layer": null,
- "total_layers": null,
- "nozzle_c": null,
- "bed_c": null,
- "chamber_c": null,
- "fan_pct": null
+ "progress_pct": 0.0,
+ "layer": 0,
+ "total_layers": 0,
+ "nozzle_c": 38.0,
+ "bed_c": 39.0,
+ "chamber_c": 31.0,
+ "fan_pct": 0
 }
