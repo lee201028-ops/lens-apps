@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-06T00:43:43Z",
+ "updated_at": "2026-10-06T00:53:35Z",
  "state": "paused",
  "file": "ghostbooams_plate_1.3mf",
  "progress_pct": 76.6,
@@ -7,6 +7,6 @@
  "total_layers": 391,
  "nozzle_c": 30.0,
  "bed_c": 54.0,
- "chamber_c": 28.0,
+ "chamber_c": 29.0,
  "fan_pct": 70
 }
