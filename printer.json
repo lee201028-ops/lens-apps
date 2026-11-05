@@ -1,12 +1,12 @@
 {
- "updated_at": "2026-11-05T02:25:44Z",
+ "updated_at": "2026-11-05T02:29:00Z",
  "state": "printing",
  "file": "lynch-christmas-lithophane-shifted-1.8mm.3mf",
- "progress_pct": 11.0,
+ "progress_pct": 13.0,
  "layer": 5,
  "total_layers": 10,
- "nozzle_c": 210.0,
- "bed_c": 54.0,
+ "nozzle_c": 209.0,
+ "bed_c": 55.0,
  "chamber_c": 32.0,
  "fan_pct": 70
 }
